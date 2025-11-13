@@ -188,3 +188,37 @@ export interface LiveBasketballAnalysis {
     sync: string;
   };
 }
+
+// Tipos para Sincronização Vercel
+export interface VercelLogAnalysis {
+    timestamp: string;
+    message: string;
+    status: string; // Emoji
+}
+
+export interface VercelDependencyReport {
+    issuesFound: boolean;
+    deprecatedPackages: {
+        oldPackage: string;
+        newPackage: string;
+        reason: string;
+    }[];
+    suggestedActions: string[];
+}
+
+export interface VercelDeploymentDetails {
+    primaryDomain: string;
+    commit: {
+        hash: string;
+        message: string;
+    };
+    durationInSeconds: number;
+}
+
+export interface VercelDeploymentReport {
+    deploymentStatus: 'Success' | 'InProgress' | 'Failed' | 'Warning';
+    summary: string;
+    logAnalysis: VercelLogAnalysis[];
+    dependencyReport: VercelDependencyReport;
+    deploymentDetails: VercelDeploymentDetails;
+}

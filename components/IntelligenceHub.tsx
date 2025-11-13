@@ -1,12 +1,12 @@
-import React from 'react';
-import { BrainCircuit, BarChart, Gamepad2, Gavel, Layers, Camera, Mic, Cpu, Cloud } from 'lucide-react';
+import React, { useState } from 'react';
+import { BrainCircuit, BarChart, Gamepad2, Gavel, Layers, Camera, Mic, Cpu, Cloud, RefreshCw, ShieldAlert } from 'lucide-react';
 import Card from './ui/Card';
 import * as Prompts from '../services/prompts';
 import { MONKEY_TIPS_AUTOMATED_SCRIPT_PROMPT } from '../services/prompts_automated';
-import { MONKEY_TIPS_VERCEL_MANAGER_PROMPT } from '../services/prompts_vercel'; // Import the new prompt
+import { MONKEY_TIPS_VERCEL_MANAGER_PROMPT } from '../services/prompts_vercel';
 import VercelPanel from './VercelPanel';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { fetchVercelDeploymentStatus } from '../services/geminiService';
+import { VercelDeploymentReport } from '../types';
 
 interface PromptDisplay {
     icon: React.ElementType;
@@ -67,6 +67,24 @@ const promptsData: PromptDisplay[] = [
 ];
 
 const IntelligenceHub: React.FC = () => {
+    const [vercelReport, setVercelReport] = useState<VercelDeploymentReport | null>(null);
+    const [isSyncing, setIsSyncing] = useState<boolean>(false);
+    const [syncError, setSyncError] = useState<string | null>(null);
+
+    const handleSyncVercel = async () => {
+        setIsSyncing(true);
+        setSyncError(null);
+        setVercelReport(null);
+        try {
+            const report = await fetchVercelDeploymentStatus();
+            setVercelReport(report);
+        } catch (err) {
+            setSyncError((err as Error).message);
+        } finally {
+            setIsSyncing(false);
+        }
+    };
+
     return (
         <div className="animate-fade-in space-y-8">
             <Card>
@@ -83,11 +101,28 @@ const IntelligenceHub: React.FC = () => {
 
             {/* Vercel Panel Section */}
             <div>
-                <h3 className="text-xl font-bold text-brand-text mb-4 flex items-center gap-3">
-                    <Cloud className="text-brand-accent" />
-                    Sincronização Vercel (Simulado)
-                </h3>
-                <VercelPanel />
+                <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-4">
+                    <h3 className="text-xl font-bold text-brand-text flex items-center gap-3">
+                        <Cloud className="text-brand-accent" />
+                        Sincronização Vercel
+                    </h3>
+                    <button
+                        onClick={handleSyncVercel}
+                        disabled={isSyncing}
+                        className="flex items-center justify-center gap-2 bg-brand-accent text-brand-dark font-bold py-2 px-4 rounded-lg hover:bg-yellow-400 transition-colors disabled:bg-zinc-600 disabled:text-zinc-400"
+                    >
+                        <RefreshCw size={16} className={isSyncing ? 'animate-spin' : ''} />
+                        {isSyncing ? 'Sincronizando...' : 'Verificar Sincronização'}
+                    </button>
+                </div>
+                 { !isSyncing && !vercelReport && !syncError && (
+                    <Card className="bg-brand-dark/30">
+                        <div className="p-6 text-center text-brand-subtle">
+                            <p>Clique em "Verificar Sincronização" para solicitar um novo relatório de status à IA.</p>
+                        </div>
+                    </Card>
+                )}
+                <VercelPanel report={vercelReport} isLoading={isSyncing} error={syncError} />
             </div>
 
             {/* Prompts Section */}
