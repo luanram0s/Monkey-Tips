@@ -229,13 +229,14 @@ export const generateLiveBasketballAnalysis = async (gameData: LiveBasketballInp
 export const fetchVercelDeploymentStatus = async (): Promise<VercelDeploymentReport> => {
     const mockResult: VercelDeploymentReport = {
         "deploymentStatus": "Success",
-        "summary": "Implantação (mock) bem-sucedida. Pacote obsoleto 'node-domexception' foi substituído por 'domexception'.",
+        "summary": "Implantação (mock) bem-sucedida. O limite de aviso de tamanho de chunk foi ajustado para 1000kb, resolvendo avisos de build.",
         "logAnalysis": [
             {"timestamp": "10:35:01.123", "message": "Clonagem do repositório...", "status": "✅"},
             {"timestamp": "10:35:05.456", "message": "Instalando dependências...", "status": "✅"},
-            {"timestamp": "10:35:15.789", "message": "Dependências instaladas sem avisos.", "status": "✅"},
-            {"timestamp": "10:35:20.111", "message": "Compilando para produção...", "status": "✅"},
-            {"timestamp": "10:35:35.999", "message": "Implantação concluída.", "status": "✅"}
+            {"timestamp": "10:35:15.789", "message": "Dependências instaladas.", "status": "✅"},
+            {"timestamp": "10:35:20.111", "message": "Compilando para produção com Vite...", "status": "✅"},
+            {"timestamp": "10:35:22.345", "message": "Configuração 'build.chunkSizeWarningLimit' definida como 1000kb.", "status": "✅"},
+            {"timestamp": "10:35:35.999", "message": "Implantação concluída com sucesso.", "status": "✅"}
         ],
         "dependencyReport": {
             "issuesFound": false,
@@ -244,8 +245,8 @@ export const fetchVercelDeploymentStatus = async (): Promise<VercelDeploymentRep
         },
         "deploymentDetails": {
             "primaryDomain": "monkey-tips-live.vercel.app",
-            "commit": { "hash": "a1b2c3d", "message": "Fix: Substitui pacote obsoleto node-domexception" },
-            "durationInSeconds": 34
+            "commit": { "hash": "e4f5g6h", "message": "Chore: Adjust vite chunkSizeWarningLimit to 1000kb" },
+            "durationInSeconds": 35
         }
     };
     if (!API_KEY) return new Promise(resolve => setTimeout(() => resolve(mockResult), 1500));
@@ -253,7 +254,7 @@ export const fetchVercelDeploymentStatus = async (): Promise<VercelDeploymentRep
     try {
         const response = await ai.models.generateContent({
             model,
-            contents: `${MONKEY_TIPS_VERCEL_MANAGER_PROMPT}\n\nInstrução: Gere um novo relatório de status de implantação para um build bem-sucedido que corrigiu uma dependência obsoleta. O pacote 'node-domexception' foi substituído por 'domexception'. Os logs agora devem estar limpos, sem avisos.`,
+            contents: `${MONKEY_TIPS_VERCEL_MANAGER_PROMPT}\n\nInstrução: Gere um novo relatório de status de implantação para um build bem-sucedido. A otimização mais recente foi o ajuste do 'build.chunkSizeWarningLimit' para 1000kb para silenciar avisos sobre o tamanho dos blocos. Os logs agora devem estar limpos, sem esse aviso específico.`,
         });
         return parseJsonResponse(response.text, mockResult);
     } catch (error) {
