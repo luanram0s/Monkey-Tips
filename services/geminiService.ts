@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import { BetSlipAnalysis, DeepDiveResult, RefereeAnalysis, MultiBetAnalysis, BetLeg, MatchResult, HeadToHeadMatch, LiveBasketballAnalysis, LiveBasketballInput, VercelDeploymentReport } from '../types';
 import * as Prompts from './prompts';
@@ -229,14 +228,13 @@ export const generateLiveBasketballAnalysis = async (gameData: LiveBasketballInp
 export const fetchVercelDeploymentStatus = async (): Promise<VercelDeploymentReport> => {
     const mockResult: VercelDeploymentReport = {
         "deploymentStatus": "Success",
-        "summary": "Implantação (mock) bem-sucedida. O limite de aviso de tamanho de chunk foi ajustado para 1000kb, resolvendo avisos de build.",
+        "summary": "Implantação (mock) bem-sucedida. Todos os pacotes estão atualizados e a compilação foi concluída sem avisos.",
         "logAnalysis": [
-            {"timestamp": "10:35:01.123", "message": "Clonagem do repositório...", "status": "✅"},
-            {"timestamp": "10:35:05.456", "message": "Instalando dependências...", "status": "✅"},
-            {"timestamp": "10:35:15.789", "message": "Dependências instaladas.", "status": "✅"},
-            {"timestamp": "10:35:20.111", "message": "Compilando para produção com Vite...", "status": "✅"},
-            {"timestamp": "10:35:22.345", "message": "Configuração 'build.chunkSizeWarningLimit' definida como 1000kb.", "status": "✅"},
-            {"timestamp": "10:35:35.999", "message": "Implantação concluída com sucesso.", "status": "✅"}
+            {"timestamp": "12:01:10.500", "message": "Clonagem do repositório...", "status": "✅"},
+            {"timestamp": "12:01:12.300", "message": "Instalando dependências...", "status": "🟡"},
+            {"timestamp": "12:01:22.800", "message": "Dependências instaladas com sucesso.", "status": "✅"},
+            {"timestamp": "12:01:28.100", "message": "Compilando para produção com Vite...", "status": "✅"},
+            {"timestamp": "12:01:40.250", "message": "Implantação concluída com sucesso.", "status": "✅"}
         ],
         "dependencyReport": {
             "issuesFound": false,
@@ -245,8 +243,8 @@ export const fetchVercelDeploymentStatus = async (): Promise<VercelDeploymentRep
         },
         "deploymentDetails": {
             "primaryDomain": "monkey-tips-live.vercel.app",
-            "commit": { "hash": "e4f5g6h", "message": "Chore: Adjust vite chunkSizeWarningLimit to 1000kb" },
-            "durationInSeconds": 35
+            "commit": { "hash": "a1b2c3d", "message": "Feat: Update dashboard UI components" },
+            "durationInSeconds": 30
         }
     };
     if (!API_KEY) return new Promise(resolve => setTimeout(() => resolve(mockResult), 1500));
@@ -254,7 +252,7 @@ export const fetchVercelDeploymentStatus = async (): Promise<VercelDeploymentRep
     try {
         const response = await ai.models.generateContent({
             model,
-            contents: `${MONKEY_TIPS_VERCEL_MANAGER_PROMPT}\n\nInstrução: Gere um novo relatório de status de implantação para um build bem-sucedido. A otimização mais recente foi o ajuste do 'build.chunkSizeWarningLimit' para 1000kb para silenciar avisos sobre o tamanho dos blocos. Os logs agora devem estar limpos, sem esse aviso específico.`,
+            contents: `${MONKEY_TIPS_VERCEL_MANAGER_PROMPT}\n\nInstrução: Gere um novo relatório de status de implantação para um build recente e bem-sucedido. O build deve estar limpo, sem avisos de dependência ou outros problemas.`,
         });
         return parseJsonResponse(response.text, mockResult);
     } catch (error) {

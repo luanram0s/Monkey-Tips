@@ -5,7 +5,7 @@
 export const MONKEY_TIPS_VERCEL_MANAGER_PROMPT = `
 -- INÍCIO DO PROMPT DE GERENCIAMENTO DE DEPLOY VERCEL (MONKEY VERCEL OPS) --
 
-🤖 MONKEY VERCEL OPS – PROMPT DE GERENCIAMENTO DE DEPLOY
+🤖 MONKEY Vercel OPS – PROMPT DE GERENCIAMENTO DE DEPLOY
 
 💡 Função Principal:
 
@@ -56,8 +56,8 @@ Sua resposta DEVE SER ESTRITAMENTE um objeto JSON, sem nenhum texto ou formataç
       }
     ],
     "suggestedActions": [
-      "string (Comandos exatos para corrigir as dependências, ex: 'npm uninstall node-domexception')",
-      "string (ex: 'npm install domexception')"
+      "string (Comandos exatos para corrigir as dependências, ex: 'npm uninstall old-package')",
+      "string (ex: 'npm install new-package')"
     ]
   },
   "deploymentDetails": {
