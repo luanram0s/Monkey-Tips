@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import { BetSlipAnalysis, DeepDiveResult, RefereeAnalysis, MultiBetAnalysis, BetLeg, MatchResult, HeadToHeadMatch, LiveBasketballAnalysis, LiveBasketballInput, VercelDeploymentReport } from '../types';
 import * as Prompts from './prompts';
@@ -228,12 +229,13 @@ export const generateLiveBasketballAnalysis = async (gameData: LiveBasketballInp
 export const fetchVercelDeploymentStatus = async (): Promise<VercelDeploymentReport> => {
     const mockResult: VercelDeploymentReport = {
         "deploymentStatus": "Success",
-        "summary": "Implantação (mock) concluída com sucesso. Nenhuma anomalia detectada.",
+        "summary": "Implantação (mock) bem-sucedida. Pacote obsoleto 'node-domexception' foi substituído por 'domexception'.",
         "logAnalysis": [
-            {"timestamp": "10:30:01.123", "message": "Clonagem do repositório...", "status": "✅"},
-            {"timestamp": "10:30:05.456", "message": "Instalando dependências...", "status": "✅"},
-            {"timestamp": "10:30:25.789", "message": "Compilando para produção...", "status": "✅"},
-            {"timestamp": "10:30:35.999", "message": "Implantação concluída.", "status": "✅"}
+            {"timestamp": "10:35:01.123", "message": "Clonagem do repositório...", "status": "✅"},
+            {"timestamp": "10:35:05.456", "message": "Instalando dependências...", "status": "✅"},
+            {"timestamp": "10:35:15.789", "message": "Dependências instaladas sem avisos.", "status": "✅"},
+            {"timestamp": "10:35:20.111", "message": "Compilando para produção...", "status": "✅"},
+            {"timestamp": "10:35:35.999", "message": "Implantação concluída.", "status": "✅"}
         ],
         "dependencyReport": {
             "issuesFound": false,
@@ -242,7 +244,7 @@ export const fetchVercelDeploymentStatus = async (): Promise<VercelDeploymentRep
         },
         "deploymentDetails": {
             "primaryDomain": "monkey-tips-live.vercel.app",
-            "commit": { "hash": "a1b2c3d", "message": "Feat: Implementa dashboard dinâmico" },
+            "commit": { "hash": "a1b2c3d", "message": "Fix: Substitui pacote obsoleto node-domexception" },
             "durationInSeconds": 34
         }
     };
@@ -251,7 +253,7 @@ export const fetchVercelDeploymentStatus = async (): Promise<VercelDeploymentRep
     try {
         const response = await ai.models.generateContent({
             model,
-            contents: `${MONKEY_TIPS_VERCEL_MANAGER_PROMPT}\n\nInstrução: Gere um novo relatório de status de implantação para um build bem-sucedido que corrigiu um pacote obsoleto.`,
+            contents: `${MONKEY_TIPS_VERCEL_MANAGER_PROMPT}\n\nInstrução: Gere um novo relatório de status de implantação para um build bem-sucedido que corrigiu uma dependência obsoleta. O pacote 'node-domexception' foi substituído por 'domexception'. Os logs agora devem estar limpos, sem avisos.`,
         });
         return parseJsonResponse(response.text, mockResult);
     } catch (error) {
