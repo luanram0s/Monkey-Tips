@@ -3,7 +3,8 @@ import { BrainCircuit, BarChart, Gamepad2, Gavel, Layers, Camera, Mic, Cpu, Clou
 import Card from './ui/Card';
 import * as Prompts from '../services/prompts';
 import { MONKEY_TIPS_AUTOMATED_SCRIPT_PROMPT } from '../services/prompts_automated';
-import VercelPanel from './VercelPanel'; // Import the new component
+import { MONKEY_TIPS_VERCEL_MANAGER_PROMPT } from '../services/prompts_vercel'; // Import the new prompt
+import VercelPanel from './VercelPanel';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -20,6 +21,12 @@ const promptsData: PromptDisplay[] = [
         title: 'Prompt Automático (Script Engine)',
         description: 'Versão otimizada e reduzida do prompt, contendo apenas a lógica operacional para uso direto em scripts de cálculo em tempo real.',
         prompt: MONKEY_TIPS_AUTOMATED_SCRIPT_PROMPT,
+    },
+    {
+        icon: Cloud,
+        title: 'Persona: Gerente de Deploy Vercel',
+        description: 'Instruções para monitorar builds da Vercel, analisar logs, detectar dependências obsoletas e gerar relatórios de status em JSON.',
+        prompt: MONKEY_TIPS_VERCEL_MANAGER_PROMPT,
     },
     {
         icon: Gamepad2,
