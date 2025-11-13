@@ -1,0 +1,7 @@
+{
+  "name": "Monkey Tips Live – O Analista Automático",
+  "description": "An automated sports analysis application that uses AI to generate insights and probabilities for football, basketball, and volleyball matches. Features admin and analyst panels, cloud sync simulation, and a modular architecture.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
