@@ -1,8 +1,9 @@
 import React from 'react';
-import { BrainCircuit, BarChart, Gamepad2, Gavel, Layers, Camera, Mic, Cpu } from 'lucide-react';
+import { BrainCircuit, BarChart, Gamepad2, Gavel, Layers, Camera, Mic, Cpu, Cloud } from 'lucide-react';
 import Card from './ui/Card';
 import * as Prompts from '../services/prompts';
 import { MONKEY_TIPS_AUTOMATED_SCRIPT_PROMPT } from '../services/prompts_automated';
+import VercelPanel from './VercelPanel'; // Import the new component
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -60,41 +61,62 @@ const promptsData: PromptDisplay[] = [
 
 const IntelligenceHub: React.FC = () => {
     return (
-        <Card className="animate-fade-in">
-            <div className="p-6">
-                <h2 className="text-2xl font-bold text-brand-text mb-2 flex items-center gap-3">
-                    <BrainCircuit className="text-brand-accent" />
-                    Central de Inteligência da IA
-                </h2>
-                <p className="text-brand-subtle mb-6">
-                    Aqui estão as "personas" e instruções-mestre que guiam o comportamento do Monkey Tips AI em cada tarefa.
-                </p>
-                <div className="space-y-6">
-                    {promptsData.map((item, index) => (
-                        <Card key={index} className="bg-brand-dark/50">
-                            <div className="p-5">
-                                <div className="flex items-start gap-4 mb-3">
-                                    <item.icon className="text-brand-accent flex-shrink-0 mt-1" size={20} />
-                                    <div>
-                                        <h3 className="font-semibold text-brand-text">{item.title}</h3>
-                                        <p className="text-sm text-brand-subtle">{item.description}</p>
-                                    </div>
-                                </div>
-                                <details>
-                                    <summary className="cursor-pointer text-sm text-brand-accent hover:underline">
-                                        Ver prompt completo
-                                    </summary>
-                                    <div className="mt-4 bg-brand-dark p-4 rounded-lg">
-                                        <pre className="whitespace-pre-wrap font-mono text-xs text-gray-300">
-                                            {item.prompt}
-                                        </pre>
-                                    </div>
-                                </details>
-                            </div>
-                        </Card>
-                    ))}
+        <div className="animate-fade-in space-y-8">
+            <Card>
+                <div className="p-6">
+                    <h2 className="text-2xl font-bold text-brand-text mb-2 flex items-center gap-3">
+                        <BrainCircuit className="text-brand-accent" />
+                        Central de Inteligência da IA
+                    </h2>
+                    <p className="text-brand-subtle">
+                        Aqui estão as "personas" e instruções-mestre que guiam o comportamento do Monkey Tips AI, junto com o status de implantação.
+                    </p>
                 </div>
+            </Card>
+
+            {/* Vercel Panel Section */}
+            <div>
+                <h3 className="text-xl font-bold text-brand-text mb-4 flex items-center gap-3">
+                    <Cloud className="text-brand-accent" />
+                    Sincronização Vercel (Simulado)
+                </h3>
+                <VercelPanel />
             </div>
+
+            {/* Prompts Section */}
+            <Card>
+                <div className="p-6">
+                    <h3 className="text-xl font-bold text-brand-text mb-6">
+                       Biblioteca de Prompts da IA
+                    </h3>
+                    <div className="space-y-6">
+                        {promptsData.map((item, index) => (
+                            <Card key={index} className="bg-brand-dark/50">
+                                <div className="p-5">
+                                    <div className="flex items-start gap-4 mb-3">
+                                        <item.icon className="text-brand-accent flex-shrink-0 mt-1" size={20} />
+                                        <div>
+                                            <h3 className="font-semibold text-brand-text">{item.title}</h3>
+                                            <p className="text-sm text-brand-subtle">{item.description}</p>
+                                        </div>
+                                    </div>
+                                    <details>
+                                        <summary className="cursor-pointer text-sm text-brand-accent hover:underline">
+                                            Ver prompt completo
+                                        </summary>
+                                        <div className="mt-4 bg-brand-dark p-4 rounded-lg">
+                                            <pre className="whitespace-pre-wrap font-mono text-xs text-gray-300">
+                                                {item.prompt}
+                                            </pre>
+                                        </div>
+                                    </details>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+            </Card>
+
             <style>{`
                 .animate-fade-in {
                     animation: fade-in 0.5s ease-out forwards;
@@ -104,7 +126,7 @@ const IntelligenceHub: React.FC = () => {
                     to { opacity: 1; transform: translateY(0); }
                 }
             `}</style>
-        </Card>
+        </div>
     );
 };
 
